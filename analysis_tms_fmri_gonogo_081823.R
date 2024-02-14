@@ -1,5 +1,3 @@
-### Resource: https://stats.stackexchange.com/questions/15713/is-it-valid-to-include-a-baseline-measure-as-control-variable-when-testing-the-e/15759#15759
-
 setwd('/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project')
 
 df=read.csv('data/tms-plip-out_061523_edit.csv')
@@ -28,7 +26,7 @@ img_only=rbind(df[, c('Visit', 'group', img_vars_rename_hc)], hc[, c('Visit', 'g
 
 # COMBAT
 library(ez.combat)
-img_only_adjusted_combat <- img_only[complete.cases(img_only[c('Visit', 'Subjects', 'Site', 'group', img_vars_rename)]), ]
+img_only_adjusted_combat  =  img_only[complete.cases(img_only[c('Visit', 'Subjects', 'Site', 'group', img_vars_rename)]), ]
 cb=ez.combat(img_only_adjusted_combat,
              'Site',
              adjust.var = img_vars_rename,
@@ -66,7 +64,7 @@ data_adjusted_combat=merge(data_adjusted_combat, fd, by = c('Subjects', 'Visit')
 # Merge Site variable
 library(dplyr)
 library(purrr)
-data_adjusted_combat <- data_adjusted_combat %>%
+data_adjusted_combat  =  data_adjusted_combat %>%
   mutate(Site = coalesce(Site.x, Site.y))
 
 # Import dates as assessments
@@ -75,15 +73,15 @@ dates=read.csv('data/all_dates.csv')
 # Calculate time from baseline
 s0=as.Date(dates[, 'Symptom_date_0'], format = '%m/%d/%y')
 for (var in c('Symptom_date_0', 'Symptom_date_1', 'Symptom_date_2')){
-  dates[, var]<- difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
+  dates[, var] =  difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
 }
 s0=as.Date(dates[, 'WebNeuro_date_0'], format = '%m/%d/%y')
 for (var in c('WebNeuro_date_0', 'WebNeuro_date_1', 'WebNeuro_date_2')){
-  dates[, var]<- difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
+  dates[, var] =  difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
 }
 s0=as.Date(dates[, 'MRI_date_0'], format = '%m/%d/%y')
 for (var in c('MRI_date_0', 'MRI_date_1', 'MRI_date_2')){
-  dates[, var]<- difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
+  dates[, var] =  difftime(as.Date(dates[, var], format = '%m/%d/%y'), s0 , units = c("days"))
 }
 
 # Add the times for each session
@@ -163,7 +161,7 @@ for (sub in unique(data_adjusted_combat$Subjects)){
 data_adjusted_combat$remit=factor((data_adjusted_combat$qids_fu<=5)*1)
 data_adjusted_combat$qids_perc=(data_adjusted_combat$qids_bl-data_adjusted_combat$qids_fu)/data_adjusted_combat$qids_bl
 data_adjusted_combat$respond=factor((data_adjusted_combat$qids_perc>0.5)*1)
-data_adjusted_combat$split_0 <- factor(data_adjusted_combat$split_0, levels = c(0, 1), labels = c("C -", "C +"))
+data_adjusted_combat$split_0  =  factor(data_adjusted_combat$split_0, levels = c(0, 1), labels = c("C -", "C +"))
 
 #### Connectivity and time ####
 
@@ -181,19 +179,19 @@ t.test(data=bl, sessage ~split_0)
 chisq.test(bl$Gender, bl$split_0)
 
 # Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + MRI_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + MRI_timediff + (1 | Subjects))
 
 # Display the model summary
 summary(model)
 anova(model)
 
 # Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
-emmeans_contrast <- pairs(emmeans_results, adjust = "none")
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_summary  =  summary(emmeans_results)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
 
 # Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
+emmeans_df  =  data.frame(emmeans_summary)
 
 #### Behavior and time ####
 
@@ -202,20 +200,20 @@ bl=data_adjusted_combat[data_adjusted_combat$Visit=='Baseline', ]
 t.test(data=bl, g2errk_norm_bl~split_0)
 
 # Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + WebNeuro_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + WebNeuro_timediff + (1 | Subjects))
 
 # Display the model summary
 summary(model)
 anova(model)
 
 # Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_summary  =  summary(emmeans_results)
 
 # Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_contrast <- pairs(emmeans_results, adjust = "none")
+emmeans_df  =  data.frame(emmeans_summary)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
 
 #### QIDS and time ####
 
@@ -224,20 +222,20 @@ bl=data_adjusted_combat[data_adjusted_combat$Visit=='Baseline', ]
 wilcox.test(data=bl, q_total~split_0)
 
 # Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + Symptom_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + Symptom_timediff + (1 | Subjects))
 
 # Display the model summary
 summary(model)
 anova(model)
 
 # Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_summary  =  summary(emmeans_results)
 
 # Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-emmeans_results <- emmeans(model, ~Visit)
-emmeans_contrast <- pairs(emmeans_results, adjust = "none")
+emmeans_df  =  data.frame(emmeans_summary)
+emmeans_results  =  emmeans(model, ~Visit)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
 
 #### Correlations
 
@@ -266,46 +264,64 @@ write.csv(data_adjusted_combat, 'data/data_adjusted_combat.csv', row.names = F)
 #### Models with covariates ####
 
 # Activation
-model <- lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + MRI_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + MRI_timediff + (1 | Subjects))
 anova(model)
-model <- lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + WebNeuro_timediff + (1 | Subjects))
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
+model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + WebNeuro_timediff + (1 | Subjects))
 anova(model)
-model <- lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + Symptom_timediff + (1 | Subjects))
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
+model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + Symptom_timediff + (1 | Subjects))
 anova(model)
+emmeans_results  =  emmeans(model, ~Visit)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
 
 # Motion
-model <- lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + FD_03 + MRI_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + FD_03 + MRI_timediff + (1 | Subjects))
 anova(model)
-model <- lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + FD_03 + WebNeuro_timediff + (1 | Subjects))
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
+model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + FD_03 + WebNeuro_timediff + (1 | Subjects))
 anova(model)
-model <- lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + FD_03 + Symptom_timediff + (1 | Subjects))
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
+model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + FD_03 + Symptom_timediff + (1 | Subjects))
 anova(model)
+emmeans_results  =  emmeans(model, ~Visit)
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+
 
 #### Behavior
 
 # Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + WebNeuro_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + WebNeuro_timediff + (1 | Subjects))
 
 # Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_summary  =  summary(emmeans_results)
 
 # Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-emmeans_results <- emmeans(model, ~Visit|split_0)
+emmeans_df  =  data.frame(emmeans_summary)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
 
 #### QIDS and time ####
 
 # Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + Symptom_timediff + (1 | Subjects))
+model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + Symptom_timediff + (1 | Subjects))
 
 # Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
+emmeans_results  =  emmeans(model, ~Visit|split_0)
+emmeans_summary  =  summary(emmeans_results)
 
 # Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-emmeans_results <- emmeans(model, ~Visit)
+emmeans_df  =  data.frame(emmeans_summary)
+emmeans_results  =  emmeans(model, ~Visit)
 
 #### MEDIATION MODEL
 
@@ -313,7 +329,7 @@ library("mediation")
 
 set.seed(123124)
 
-temp=temp <- data_adjusted_combat %>%
+temp=temp  =  data_adjusted_combat %>%
   filter(!is.na(split_0) & !is.na(ppi_diff_bl) & !is.na(g2errk_norm_diff_bl))
 
 fit.mediator=lm(ppi_diff_bl~split_0,temp)
@@ -348,7 +364,7 @@ data_adjusted_combat$verbal_mem=rowMeans(data_adjusted_combat[, c('ctmlearn_norm
 data_adjusted_combat$working_mem=rowMeans(data_adjusted_combat[, c('digitot_norm', 'digitsp_norm')], na.rm = T)
 data_adjusted_combat$sustained_att=rowMeans(data_adjusted_combat[, c('wmfpk_norm', 'wmfnk_norm', 'wmrtk_norm')], na.rm = T)
 for (sub in unique(data_adjusted_combat$Subjects)){
-
+  
   # Store change from baseline
   verbal_mem_bl=data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Baseline', 'verbal_mem']
   verbal_mem_v1=data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Early Treatment', 'verbal_mem']
@@ -357,7 +373,7 @@ for (sub in unique(data_adjusted_combat$Subjects)){
   if (length(verbal_mem_bl)>0 & length(verbal_mem_v1)>0){data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Early Treatment', 'verbal_mem_diff_bl']= verbal_mem_v1-verbal_mem_bl}
   if (length(verbal_mem_bl)>0 & length(verbal_mem_v2)>0){data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Post-Treatment', 'verbal_mem_diff_bl']= verbal_mem_v2-verbal_mem_bl}
   if (length(verbal_mem_bl)>0 ){data_adjusted_combat[data_adjusted_combat$Subjects==sub, 'verbal_mem_bl']=verbal_mem_bl}
-
+  
   # Store change from baseline
   working_mem_bl=data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Baseline', 'working_mem']
   working_mem_v1=data_adjusted_combat[data_adjusted_combat$Subjects==sub & data_adjusted_combat$Visit=='Early Treatment', 'working_mem']
@@ -389,7 +405,7 @@ library(ggplot2)
 #### Behavior at baseline
 
 # Compute means and standard errors
-bl_summary <- bl %>%
+bl_summary  =  bl %>%
   group_by(split_0) %>%
   summarise(
     mean_value = mean(g2errk_norm_bl, na.rm = TRUE),
@@ -410,253 +426,279 @@ ggplot(bl_summary, aes(x = split_0, y = mean_value, fill = split_0)) +
   ylim(c(-1, 1))
 dev.off()
 
-#### Connectivity adjusted
-
-# Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, ppi_gonogo_LdlPFC_MdACC ~ split_0*Visit + MRI_timediff + (1 | Subjects))
-
-# Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
-
-# Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-
-# Create a ggplot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_adj.png", width = 800, height = 600)
-ggplot(emmeans_df, aes(x = Visit, y = emmean, color = split_0, group = split_0)) +
-  geom_line(size = 2) +
-  geom_point(size = 3, position = position_dodge(0.05)) +
-  geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE), width = 0.2, position = position_dodge(0.05), size = 1) +
-  labs(y = 'Connectivity (adjusted)', color = 'Biotype', x='') +
-  theme_minimal() +
-  theme(legend.position = "top") + 
-  theme(text = element_text(size = 24)) +
-  scale_color_manual(values = c("#B75A65", "gray40"))
-dev.off()
-
-#### Behavior adjusted
-
-# Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, g2errk_norm ~ split_0*Visit + MRI_timediff + (1 | Subjects))
-
-# Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
-
-# Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-
-# Create a ggplot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_adj.png", width = 800, height = 600)
-ggplot(emmeans_df, aes(x = Visit, y = emmean, color = split_0, group = split_0)) +
-  geom_line(size = 2) +
-  geom_point(size = 3, position = position_dodge(0.05)) +
-  geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE), width = 0.2, position = position_dodge(0.05), size = 1) +
-  labs(y = 'Go-NoGo Performance (adjusted)', color = 'Biotype', x='') +
-  theme_minimal() +
-  theme(legend.position = "top") + 
-  theme(text = element_text(size = 24)) +
-  scale_color_manual(values = c("#B75A65", "gray40"))
-dev.off()
-
-#### QIDS adjusted
-
-# Fit the linear mixed effects model
-model <- lmer(data=data_adjusted_combat, q_total ~ split_0*Visit + Symptom_timediff + (1 | Subjects))
-
-# Extract the estimated marginal means and their standard errors
-emmeans_results <- emmeans(model, ~Visit|split_0)
-emmeans_summary <- summary(emmeans_results)
-
-# Create a dataframe from the summary object
-emmeans_df <- data.frame(emmeans_summary)
-emmeans_results <- emmeans(model, ~Visit)
-
-# Create a ggplot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_adj.png", width = 800, height = 600)
-ggplot(emmeans_df, aes(x = Visit, y = emmean, color = split_0, group = split_0)) +
-  geom_line(size = 2) +
-  geom_point(size = 3, position = position_dodge(0)) +
-  geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE), width = 0.2, position = position_dodge(0), size = 1) +
-  labs(y = 'QIDS Total (adjusted)', color = 'Biotype', x='') +
-  theme_minimal() +
-  theme(legend.position = "top") + 
-  theme(text = element_text(size = 24)) +
-  scale_color_manual(values = c("#B75A65", "gray40"))
-dev.off()
-
 ### Connectivity raw
 
-# Exclude rows with NA in split
-temp <- data_adjusted_combat %>%
-  filter(!is.na(split_0))
-
 # Calculate means and standard errors
-data_means <- temp %>%
+data_means  =  data_adjusted_combat_temp %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(ppi_gonogo_LdlPFC_MdACC, na.rm = TRUE),
             se = sd(ppi_gonogo_LdlPFC_MdACC, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
-# Create the raw line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw.png", width = 800, height = 600)
+# Line plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean.png", width = 600, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "Connectivity (raw)", x = "") +
+  labs(y = "Connectivity", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
-  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
+  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
+  ylim(c(-1, 1))
+dev.off()
+
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'Connectivity', color = 'Biotype', x = '') +
+  theme_minimal() +
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
 
 #### Behavior raw
 
 # Calculate means and standard errors
-data_means <- temp %>%
+data_means  =  data_adjusted_combat_temp %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(g2errk_norm, na.rm = TRUE),
-            se = sd( g2errk_norm, na.rm = TRUE) / sqrt(n()), 
+            se = sd(g2errk_norm, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
-# Create the line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_raw.png", width = 800, height = 600)
+# Line plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean.png", width = 600, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "Go-NoGo Performance (raw)", x = "") +
+  labs(y = "Go-NoGo Performance", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
-  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
+  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
+  ylim(c(-1, 1))
 dev.off()
+
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'Go-NoGo Performance', color = 'Biotype', x = '') +
+  theme_minimal() +
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
+dev.off()
+
 
 #### QIDS raw
 
 # Calculate means and standard errors
-data_means <- temp %>%
+data_means  =  data_adjusted_combat_temp %>%
   group_by(Visit, split_0) %>%
-  summarise(mean = mean( q_total, na.rm = TRUE),
-            se = sd( q_total, na.rm = TRUE) / sqrt(n()), 
+  summarise(mean = mean(q_total, na.rm = TRUE),
+            se = sd(q_total, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
-# Create the line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw.png", width = 800, height = 600)
+# Line plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean.png", width = 600, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "QIDS Total (raw)", x = "") +
+  labs(y = "QIDS total", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
-  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
+  scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
+  ylim(c(0, 20))
 dev.off()
+
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'QIDS total', color = 'Biotype', x = '') +
+  theme_minimal() +
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
+dev.off()
+
 
 #### Change in connectivity
 
-# Calculate means and standard errors
-data_means <- temp %>%
+# Line plot
+data_means  =  temp %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(ppi_diff_bl, na.rm = TRUE),
             se = sd(ppi_diff_bl, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
 # Create the raw line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff.png", width = 800, height = 600)
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean.png", width = 800, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "Connectivity Change (raw)", x = "") +
+  labs(y = "Connectivity Change", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
+dev.off()
+
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_diff_bl, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'Connectivity Change', color = 'Biotype', x = '') +
+  theme_minimal() +
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
 
 #### Change in Behavior
 
 # Calculate means and standard errors
-data_means <- temp %>%
+data_means  =  temp %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(g2errk_norm_diff_bl, na.rm = TRUE),
             se = sd(g2errk_norm_diff_bl, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
-# Create the raw line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_raw_diff.png", width = 800, height = 600)
+# Line plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff.png", width = 800, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "Go-NoGo Performance Change (raw)", x = "") +
+  labs(y = "Go-NoGo Performance Change", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
 dev.off()
 
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm_diff_bl, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'Go-NoGo Performance Change', color = 'Biotype', x = '') +
+  theme_minimal() +
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
+dev.off()
+
+
 #### Change in QIDS
 
 # Calculate means and standard errors
-data_means <- temp %>%
+data_means  =  temp %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(q_total_diff_bl, na.rm = TRUE),
             se = sd(q_total_diff_bl, na.rm = TRUE) / sqrt(n()), 
             .groups = "drop")
 
-# Create the raw line plot
+# Line plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff.png", width = 800, height = 600)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
-  labs(y = "QIDS Total Change (raw)", x = "") +
+  labs(y = "QIDS Total Change", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
   theme(legend.position = "top") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))
 dev.off()
 
-#### Spaghetti plots for the connectivity ####
-
-# Create the plot
-png(file=paste("/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_indivsubs.png", sep=''),width=800, height=800)
-ggplot(data_adjusted_combat, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, group = Subjects, color = split_0)) +
-  geom_line(size = 1) +
-  geom_point(size = 2, position = position_dodge(0)) +
-  labs(y = 'Connectivity (raw)', color = 'Biotype', x = '') +
+# Dots and lines plot
+png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff_mean_dots.png", width = 1000, height = 600)
+ggplot() +
+  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total_diff_bl, color = split_0), 
+              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+            alpha = 0.5, size = 0.5) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+  geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
+                width = 0.2, size = 1) +
+  facet_wrap(~ split_0) +
+  labs(y = 'QIDS Total Change', color = 'Biotype', x = '') +
   theme_minimal() +
-  theme(legend.position = "top") + 
-  theme(text = element_text(size = 24)) +
-  scale_color_manual(values = c("#B75A65", "gray40"))
+  theme(legend.position = "top", text = element_text(size = 24)) +
+  scale_color_manual(values = c("#B75A65", "gray40")) +
+  scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
 
-#### Spaghetti plots for each QIDS symptom ####
+
+#### Plots for each QIDS symptom ####
 
 library(tidyverse)
 library(scales)
 
 # Rename the variables
-data_adjusted_combat <- rename(data_adjusted_combat, QIDS01 = q1, QIDS02 = q2, QIDS03 = q3, QIDS04 = q4,
-                               QIDS05 = q5, QIDS06 = q6, QIDS07 = q7, QIDS08 = q8, QIDS09 = q9, QIDS10 = q10,
-                               QIDS11 = q11, QIDS12 = q12, QIDS13 = q13, QIDS14 = q14, QIDS15 = q15, QIDS16 = q16)
+data_adjusted_combat  =  rename(data_adjusted_combat, QIDS01 = q1, QIDS02 = q2, QIDS03 = q3, QIDS04 = q4,
+                                QIDS05 = q5, QIDS06 = q6, QIDS07 = q7, QIDS08 = q8, QIDS09 = q9, QIDS10 = q10,
+                                QIDS11 = q11, QIDS12 = q12, QIDS13 = q13, QIDS14 = q14, QIDS15 = q15, QIDS16 = q16)
 
 # Reshape the data into a long format
-long_data <- data_adjusted_combat %>%
+long_data  =  data_adjusted_combat %>%
   pivot_longer(
     cols = c("QIDS01", "QIDS02", "QIDS03", "QIDS04", "QIDS05", "QIDS06", "QIDS07", "QIDS08", 
              "QIDS09", "QIDS10", "QIDS11", "QIDS12", "QIDS13", "QIDS14", "QIDS15", "QIDS16"), 
     names_to = "q_var", 
     values_to = "q_value"
   ) %>%
+  group_by(q_var, Visit, split_0)
+
+# Calculate means and standard errors
+data_means  =  long_data %>%
   group_by(q_var, Visit, split_0) %>%
-  summarise(mean = mean(q_value, na.rm = TRUE), 
-            se = sd(q_value, na.rm = TRUE) / sqrt(n()), .groups = 'drop')
+  summarise(mean = mean(q_value, na.rm = TRUE),
+            se = sd(q_value, na.rm = TRUE) / sqrt(n()), 
+            .groups = "drop")
 
 # Create the plot
 png(file=paste("/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_indiv.png", sep=''),width=800, height=800)
@@ -672,6 +714,3 @@ ggplot(long_data, aes(x = Visit, y = mean, color = split_0, group = split_0)) +
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + # Adjust x-axis labels
   scale_color_manual(values = c("#B75A65", "gray40"))
 dev.off()
-
-
-
