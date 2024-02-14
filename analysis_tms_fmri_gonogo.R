@@ -429,7 +429,7 @@ dev.off()
 ### Connectivity raw
 
 # Calculate means and standard errors
-data_means  =  data_adjusted_combat_temp %>%
+data_means  =  data_adjusted_combat %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(ppi_gonogo_LdlPFC_MdACC, na.rm = TRUE),
             se = sd(ppi_gonogo_LdlPFC_MdACC, na.rm = TRUE) / sqrt(n()), 
@@ -452,9 +452,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -470,7 +470,7 @@ dev.off()
 #### Behavior raw
 
 # Calculate means and standard errors
-data_means  =  data_adjusted_combat_temp %>%
+data_means  =  data_adjusted_combat %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(g2errk_norm, na.rm = TRUE),
             se = sd(g2errk_norm, na.rm = TRUE) / sqrt(n()), 
@@ -493,9 +493,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -512,7 +512,7 @@ dev.off()
 #### QIDS raw
 
 # Calculate means and standard errors
-data_means  =  data_adjusted_combat_temp %>%
+data_means  =  data_adjusted_combat %>%
   group_by(Visit, split_0) %>%
   summarise(mean = mean(q_total, na.rm = TRUE),
             se = sd(q_total, na.rm = TRUE) / sqrt(n()), 
@@ -535,9 +535,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = q_total, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = q_total, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -576,9 +576,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_diff_bl, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = ppi_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = ppi_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = ppi_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -616,9 +616,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm_diff_bl, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = g2errk_norm_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -657,9 +657,9 @@ dev.off()
 # Dots and lines plot
 png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff_mean_dots.png", width = 1000, height = 600)
 ggplot() +
-  geom_jitter(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total_diff_bl, color = split_0), 
+  geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = q_total_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
-  geom_line(data = data_adjusted_combat_temp, aes(x = Visit, y = q_total_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
+  geom_line(data = data_adjusted_combat, aes(x = Visit, y = q_total_diff_bl, group = interaction(Subjects, split_0), color = split_0), 
             alpha = 0.5, size = 0.5) +
   geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
@@ -702,7 +702,7 @@ data_means  =  long_data %>%
 
 # Create the plot
 png(file=paste("/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_indiv.png", sep=''),width=800, height=800)
-ggplot(long_data, aes(x = Visit, y = mean, color = split_0, group = split_0)) +
+ggplot(data_means, aes(x = Visit, y = mean, color = split_0, group = split_0)) +
   geom_line(size = 1) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 1) +
   facet_wrap(~ q_var, scales = 'free_y') +
