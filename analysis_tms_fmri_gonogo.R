@@ -161,7 +161,7 @@ for (sub in unique(data_adjusted_combat$Subjects)){
 data_adjusted_combat$remit=factor((data_adjusted_combat$qids_fu<=5)*1)
 data_adjusted_combat$qids_perc=(data_adjusted_combat$qids_bl-data_adjusted_combat$qids_fu)/data_adjusted_combat$qids_bl
 data_adjusted_combat$respond=factor((data_adjusted_combat$qids_perc>0.5)*1)
-data_adjusted_combat$split_0  =  factor(data_adjusted_combat$split_0, levels = c(0, 1), labels = c("C -", "C +"))
+data_adjusted_combat$split_0  =  factor(data_adjusted_combat$split_0, levels = c(0, 1), labels = c("Cognitive biotype +", "Cognitive biotype -"))
 
 #### Connectivity and time ####
 
