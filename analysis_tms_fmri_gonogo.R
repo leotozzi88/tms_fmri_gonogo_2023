@@ -172,7 +172,7 @@ library(emmeans)
 
 # Compare at baseline
 bl=data_adjusted_combat[data_adjusted_combat$Visit=='Baseline', ]
-wilcox.test(data=bl, ppi_gonogo_LdlPFC_MdACC~split_0)
+t.test(data=bl, ppi_gonogo_LdlPFC_MdACC~split_0)
 
 # Comparison between groups for demographics
 t.test(data=bl, sessage ~split_0)
@@ -188,7 +188,8 @@ anova(model)
 # Extract the estimated marginal means and their standard errors
 emmeans_results  =  emmeans(model, ~Visit|split_0)
 emmeans_summary  =  summary(emmeans_results)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 # Create a dataframe from the summary object
 emmeans_df  =  data.frame(emmeans_summary)
@@ -213,7 +214,8 @@ emmeans_summary  =  summary(emmeans_results)
 # Create a dataframe from the summary object
 emmeans_df  =  data.frame(emmeans_summary)
 emmeans_results  =  emmeans(model, ~Visit|split_0)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 #### QIDS and time ####
 
@@ -235,7 +237,8 @@ emmeans_summary  =  summary(emmeans_results)
 # Create a dataframe from the summary object
 emmeans_df  =  data.frame(emmeans_summary)
 emmeans_results  =  emmeans(model, ~Visit)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 #### Correlations
 
@@ -267,34 +270,40 @@ write.csv(data_adjusted_combat, 'data/data_adjusted_combat.csv', row.names = F)
 model  =  lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + MRI_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit|split_0)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + WebNeuro_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit|split_0)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + act_gonogo_LdlPFC + Symptom_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 
 # Motion
 model  =  lmer(data=data_adjusted_combat, ppi_diff_bl ~ split_0*Visit + FD_03 + MRI_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit|split_0)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 model  =  lmer(data=data_adjusted_combat, g2errk_norm_diff_bl ~ split_0*Visit + FD_03 + WebNeuro_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit|split_0)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 model  =  lmer(data=data_adjusted_combat, q_total_diff_bl ~ split_0*Visit + FD_03 + Symptom_timediff + (1 | Subjects))
 anova(model)
 emmeans_results  =  emmeans(model, ~Visit)
-emmeans_contrast  =  pairs(emmeans_results, adjust = "none")
+emmeans_contrast  =  pairs(emmeans_results, adjust = "none", reverse = TRUE)
+confint(emmeans_contrast)
 
 
 #### Behavior
@@ -417,14 +426,19 @@ png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_p
 ggplot(bl_summary, aes(x = split_0, y = mean_value, fill = split_0)) +
   geom_bar(stat = "identity") +
   geom_errorbar(aes(ymin = mean_value - se_value, ymax = mean_value + se_value), width = 0.2) +
+  geom_jitter(data = bl, aes(x = split_0, y = ppi_gonogo_LdlPFC_MdACC, fill = split_0, color='black'), 
+              shape = 21, size = 2, alpha = 0.5, position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0)) +
   theme_minimal() +
   xlab('Biotype') +
   ylab('Go-NoGo Performance at Baseline') +
   theme(legend.position = "none") + 
   theme(text = element_text(size = 24)) +
-  scale_fill_manual(values = c("#B75A65", "gray40")) +
-  ylim(c(-1, 1))
+  scale_fill_manual(values = c("#B75A65", "gray40", "#B75A65", "gray40")) +
+  scale_color_manual(values = c("black")) +
+  ylim(c(-3, 3))
 dev.off()
+
+
 
 ### Connectivity raw
 
