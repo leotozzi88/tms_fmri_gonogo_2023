@@ -422,15 +422,15 @@ bl_summary  =  bl %>%
   )
 
 # Create the bar plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_bl_bar.png", width = 500, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_bl_bar.svg", width = 7, height = 8.5)
 ggplot(bl_summary, aes(x = split_0, y = mean_value, fill = split_0)) +
   geom_bar(stat = "identity") +
-  geom_errorbar(aes(ymin = mean_value - se_value, ymax = mean_value + se_value), width = 0.2) +
+  geom_errorbar(aes(ymin = mean_value - se_value, ymax = mean_value + se_value), width = 0.2, size=8) +
   geom_jitter(data = bl, aes(x = split_0, y = ppi_gonogo_LdlPFC_MdACC, fill = split_0, color='black'), 
               shape = 21, size = 2, alpha = 0.5, position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0)) +
   theme_minimal() +
-  xlab('Biotype') +
-  ylab('Go-NoGo Performance at Baseline') +
+  xlab('') +
+  ylab('Behavioral Performance at Baseline') +
   theme(legend.position = "none") + 
   theme(text = element_text(size = 24)) +
   scale_fill_manual(values = c("#B75A65", "gray40", "#B75A65", "gray40")) +
@@ -450,33 +450,33 @@ data_means  =  data_adjusted_combat %>%
             .groups = "drop")
 
 # Line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean.png", width = 600, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean.svg", width = 8.5, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
-  geom_line(aes(group = split_0), size = 2) +
+  geom_line(aes(group = split_0), size = 8) +
   geom_point(size = 3) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=8) +
   labs(y = "Connectivity", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
-  theme(legend.position = "top") +
+  theme(legend.position = "None") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
   ylim(c(-1, 1))
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_mean_dots.svg", width = 15, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, color = split_0), 
-              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+              size = 2, alpha = 2, position = position_dodge(0.8)) +
   geom_line(data = data_adjusted_combat, aes(x = Visit, y = ppi_gonogo_LdlPFC_MdACC, group = interaction(Subjects, split_0), color = split_0), 
-            alpha = 0.5, size = 0.5) +
-  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+            alpha = 0.5, size = 2) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 8) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
-                width = 0.2, size = 1) +
+                width = 0.2, size = 8) +
   facet_wrap(~ split_0) +
   labs(y = 'Connectivity', color = 'Biotype', x = '') +
   theme_minimal() +
-  theme(legend.position = "top", text = element_text(size = 24)) +
+  theme(legend.position = "None", text = element_text(size = 24), strip.text = element_blank()) +
   scale_color_manual(values = c("#B75A65", "gray40")) +
   scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
@@ -491,33 +491,33 @@ data_means  =  data_adjusted_combat %>%
             .groups = "drop")
 
 # Line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean.png", width = 600, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean.svg", width = 8.5, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
-  geom_line(aes(group = split_0), size = 2) +
+  geom_line(aes(group = split_0), size = 8) +
   geom_point(size = 3) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=8) +
   labs(y = "Go-NoGo Performance", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
-  theme(legend.position = "top") +
+  theme(legend.position = "None") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
   ylim(c(-1, 1))
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_mean_dots.svg", width = 15, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
   geom_line(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm, group = interaction(Subjects, split_0), color = split_0), 
-            alpha = 0.5, size = 0.5) +
-  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+            alpha = 0.5, size = 2) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 8) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
-                width = 0.2, size = 1) +
+                width = 0.2, size = 8) +
   facet_wrap(~ split_0) +
   labs(y = 'Go-NoGo Performance', color = 'Biotype', x = '') +
   theme_minimal() +
-  theme(legend.position = "top", text = element_text(size = 24)) +
+  theme(legend.position = "None", text = element_text(size = 24), strip.text = element_blank()) +
   scale_color_manual(values = c("#B75A65", "gray40")) +
   scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
@@ -533,33 +533,33 @@ data_means  =  data_adjusted_combat %>%
             .groups = "drop")
 
 # Line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean.png", width = 600, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean.svg", width = 8.5, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
-  geom_line(aes(group = split_0), size = 2) +
+  geom_line(aes(group = split_0), size = 8) +
   geom_point(size = 3) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=1) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size=8) +
   labs(y = "QIDS total", x = "") +
   theme_minimal() +
   theme(text = element_text(size = 24))+
-  theme(legend.position = "top") +
+  theme(legend.position = "None") +
   scale_color_manual(name = "Biotype", values = c("#B75A65", "gray40"))+ 
   ylim(c(0, 20))
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_mean_dots.svg", width = 15, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = q_total, color = split_0), 
-              size = 2, alpha = 0.5, position = position_dodge(0.8)) +
+              size = 2, alpha = 2, position = position_dodge(0.8)) +
   geom_line(data = data_adjusted_combat, aes(x = Visit, y = q_total, group = interaction(Subjects, split_0), color = split_0), 
-            alpha = 0.5, size = 0.5) +
-  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 2) +
+            alpha = 0.5, size = 2) +
+  geom_line(data = data_means, aes(x = Visit, y = mean, group = split_0, color = split_0), size = 8) +
   geom_errorbar(data = data_means, aes(x = Visit, y = mean, ymin = mean - se, ymax = mean + se, color = split_0), 
-                width = 0.2, size = 1) +
+                width = 0.2, size = 8) +
   facet_wrap(~ split_0) +
   labs(y = 'QIDS total', color = 'Biotype', x = '') +
   theme_minimal() +
-  theme(legend.position = "top", text = element_text(size = 24)) +
+  theme(legend.position = "None", text = element_text(size = 24), strip.text = element_blank()) +
   scale_color_manual(values = c("#B75A65", "gray40")) +
   scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
@@ -575,7 +575,7 @@ data_means  =  temp %>%
             .groups = "drop")
 
 # Create the raw line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean.png", width = 800, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean.svg", width = 12, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
@@ -588,7 +588,7 @@ ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/conn_raw_diff_mean_dots.svg", width = 15, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = ppi_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
@@ -615,7 +615,7 @@ data_means  =  temp %>%
             .groups = "drop")
 
 # Line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff.png", width = 800, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff.svg", width = 12, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
@@ -628,7 +628,7 @@ ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/beh_raw_diff_mean_dots.svg", width = 12, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = g2errk_norm_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
@@ -645,6 +645,20 @@ ggplot() +
   scale_fill_manual(values = c("#B75A65", "gray40")) 
 dev.off()
 
+#### Change in behavior vs. change in connectivity
+fit <- lm(g2errk_norm_diff_bl ~ ppi_diff_bl, data = data_adjusted_combat)
+
+# Plot the data with the linear model's fit
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/gng_conn_change.svg", width = 12, height = 8.5)
+ggplot(data_adjusted_combat, aes(x=ppi_diff_bl, y=g2errk_norm_diff_bl)) +
+  geom_point(shape=16, size=2) + 
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype="dashed") +
+  theme_minimal() +
+  xlab('Connectivity Change') +
+  ylab('Go-NoGo Performance Change') + 
+  theme(text = element_text(size = 24))
+dev.off()
+
 
 #### Change in QIDS
 
@@ -656,7 +670,7 @@ data_means  =  temp %>%
             .groups = "drop")
 
 # Line plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff.png", width = 800, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff.svg", width = 12, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
   geom_line(aes(group = split_0), size = 2) +
   geom_point(size = 3) +
@@ -669,7 +683,7 @@ ggplot(data_means, aes(x = Visit, y = mean, color = split_0)) +
 dev.off()
 
 # Dots and lines plot
-png(filename="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff_mean_dots.png", width = 1000, height = 600)
+svg(file="/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_raw_diff_mean_dots.svg", width = 12, height = 8.5)
 ggplot() +
   geom_jitter(data = data_adjusted_combat, aes(x = Visit, y = q_total_diff_bl, color = split_0), 
               size = 2, alpha = 0.5, position = position_dodge(0.8)) +
@@ -715,7 +729,7 @@ data_means  =  long_data %>%
             .groups = "drop")
 
 # Create the plot
-png(file=paste("/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_indiv.png", sep=''),width=800, height=800)
+svg(file=paste("/Users/ltozzi/My Drive (ltozzi@stanford.edu)/Projects/tms_gonogo_project/plots/qids_indiv.svg", sep=''),width = 8.5, height = 8.5)
 ggplot(data_means, aes(x = Visit, y = mean, color = split_0, group = split_0)) +
   geom_line(size = 1) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 1) +
